@@ -8,10 +8,11 @@ module "networking" {
 
 }
 
-# module "security-group" {
-#   source = ""
-
-# }
+module "security-group" {
+  source = "./security-group"
+  sg_name = "jenkins_sg"
+  vpc_id = module.networking.jenkins_vpc_id
+}
 
 # module "jenkins-ec2" {
 #   source = ""

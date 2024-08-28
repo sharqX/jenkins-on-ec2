@@ -4,6 +4,10 @@ variable "private_subnet_cidr" {}
 variable "ap_availability_zone" {}
 variable "public_subnet_cidr" {}
 
+output "jenkins_vpc_id" {
+  value = aws_vpc.jenkins_vpc.id
+}
+
 resource "aws_vpc" "jenkins_vpc" {
   cidr_block = var.vpc_cidr
   tags = {
