@@ -9,15 +9,21 @@ module "networking" {
 }
 
 module "security-group" {
-  source = "./security-group"
+  source  = "./security-group"
   sg_name = "jenkins_sg"
-  vpc_id = module.networking.jenkins_vpc_id
+  vpc_id  = module.networking.jenkins_vpc_id
 }
 
-# module "jenkins-ec2" {
-#   source = ""
-
-# }
+module "jenkins-ec2" {
+  source                    = "./jenkins-ec2"
+  ami_id                    = var.ami_id
+  instance_type             = "t2.medium"
+  subnet_id                 = module.networking.public_subnet_id
+  sg_id                     = module.security-group.sg_id
+  pub_ip                    = true
+  user_data_install_jenkins = templatefile("./jenkins_install/installer.sh", {})
+  public_key                = var.public_key
+}
 
 # module "lb-target-group" {
 #   source = ""

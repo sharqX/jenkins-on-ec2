@@ -8,6 +8,10 @@ output "jenkins_vpc_id" {
   value = aws_vpc.jenkins_vpc.id
 }
 
+output "public_subnet_id" {
+  value = aws_subnet.jenkins_public_subnet.id
+}
+
 resource "aws_vpc" "jenkins_vpc" {
   cidr_block = var.vpc_cidr
   tags = {

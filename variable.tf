@@ -19,3 +19,14 @@ variable "public_subnet_cidr" {
   type        = string
   description = "Pulic Subnet CIDR Value"
 }
+
+#ec2
+variable "ami_id" {
+  type        = string
+  description = "ami id for ec2 instance"
+}
+
+variable "public_key" {
+  type = string
+  description = "Public key value"
+}
