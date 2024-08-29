@@ -9,7 +9,7 @@ output "jenkins_vpc_id" {
 }
 
 output "public_subnet_id" {
-  value = aws_subnet.jenkins_public_subnet.id
+  value = aws_subnet.jenkins_public_subnet.*.id
 }
 
 resource "aws_vpc" "jenkins_vpc" {
@@ -20,22 +20,24 @@ resource "aws_vpc" "jenkins_vpc" {
 }
 
 resource "aws_subnet" "jenkins_public_subnet" {
+  count             = length(var.public_subnet_cidr)
   vpc_id            = aws_vpc.jenkins_vpc.id
-  cidr_block        = var.public_subnet_cidr
-  availability_zone = var.ap_availability_zone
+  cidr_block        = element(var.public_subnet_cidr, count.index)
+  availability_zone = element(var.ap_availability_zone, count.index)
 
   tags = {
-    Name = "Jenkins Public Subnet"
+    Name = "Jenkins Public Subnet-$(count.index + 1)"
   }
 }
 
 resource "aws_subnet" "jenkins_private_subnet" {
+  count             = length(var.private_subnet_cidr)
   vpc_id            = aws_vpc.jenkins_vpc.id
-  cidr_block        = var.private_subnet_cidr
-  availability_zone = var.ap_availability_zone
+  cidr_block        = element(var.private_subnet_cidr, count.index)
+  availability_zone = element(var.ap_availability_zone, count.index)
 
   tags = {
-    Name = "Jenkins Private Subnet"
+    Name = "Jenkins Private Subnet-$(count.index + 1)"
   }
 }
 
@@ -61,7 +63,8 @@ resource "aws_route_table" "public_subnet_rt" {
 }
 
 resource "aws_route_table_association" "public_subnet_rta" {
-  subnet_id      = aws_subnet.jenkins_public_subnet.id
+  count          = length(aws_subnet.jenkins_public_subnet)
+  subnet_id      = aws_subnet.jenkins_public_subnet[count.index].id
   route_table_id = aws_route_table.public_subnet_rt.id
 }
 
@@ -74,6 +77,7 @@ resource "aws_route_table" "private_subnet_rt" {
 }
 
 resource "aws_route_table_association" "private_subnet_rta" {
-  subnet_id      = aws_subnet.jenkins_private_subnet.id
+  count          = length(aws_subnet.jenkins_private_subnet)
+  subnet_id      = aws_subnet.jenkins_private_subnet[count.index].id
   route_table_id = aws_route_table.private_subnet_rt.id
 }

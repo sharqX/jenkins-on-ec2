@@ -58,7 +58,7 @@ resource "aws_lb_listener" "https_listener" {
   load_balancer_arn = aws_lb.jenkins_lb.arn
   port              = var.lb_https_listener_port
   protocol          = var.lb_https_listener_protocol
-  ssl_policy        = "ELBSecurityPolicy-FS-1-2-Res-2020-10"
+  ssl_policy        = "ELBSecurityPolicy-FS-1-2-Res-2019-08"
   certificate_arn   = var.jenkins_acm_arn
 
   default_action {

@@ -3,7 +3,7 @@ variable "lb_dns_name" {}
 variable "lb_zone_id" {}
 
 output "hosted_zone_id" {
-  value = aws_route53_record.lb_record.id
+  value = data.aws_route53_zone.domain_name.zone_id
 }
 
 data "aws_route53_zone" "domain_name" {

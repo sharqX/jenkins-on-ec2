@@ -18,7 +18,7 @@ module "jenkins-ec2" {
   source                    = "./jenkins-ec2"
   ami_id                    = var.ami_id
   instance_type             = "t2.medium"
-  subnet_id                 = module.networking.public_subnet_id
+  subnet_id                 = tolist(module.networking.public_subnet_id)[0]
   sg_id                     = module.security-group.sg_id
   pub_ip                    = true
   user_data_install_jenkins = templatefile("./jenkins_install/installer.sh", {})
@@ -41,7 +41,7 @@ module "load-balancer" {
   is_internal                = false
   lb_type                    = "application"
   lb_sg                      = [module.security-group.sg_id]
-  lb_subnet                  = [module.networking.public_subnet_id]
+  lb_subnet                  = tolist(module.networking.public_subnet_id)
   target_group_arn           = module.lb-target-group.lb_target_group_arn
   ec2_intance_id             = module.jenkins-ec2.jenkins_instance_id
   target_group_attach_port   = 8080

@@ -27,6 +27,7 @@ resource "aws_route53_record" "validation" {
       type   = dvo.resource_record_type
     }
   }
+
   zone_id = var.hosted_zone_id
   name    = each.value.name
   type    = each.value.type
