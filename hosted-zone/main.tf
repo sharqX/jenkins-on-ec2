@@ -12,7 +12,7 @@ data "aws_route53_zone" "domain_name" {
 }
 
 resource "aws_route53_record" "lb_record" {
-  zone_id = data.aws_route53_zone.infotex_digital
+  zone_id = data.aws_route53_zone.domain_name.zone_id
   name    = var.subdomain_name
   type    = "A"
 

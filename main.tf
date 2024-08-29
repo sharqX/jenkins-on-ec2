@@ -27,9 +27,9 @@ module "jenkins-ec2" {
 
 module "lb-target-group" {
   source                   = "./lb-target-group"
-  lb_target_group_name     = "Jenkins LB Target Group"
+  lb_target_group_name     = "jenkins-target-group"
   lb_target_group_port     = 8080
-  lb_target_group_protocol = "tcp"
+  lb_target_group_protocol = "HTTP"
   vpc_id                   = module.networking.jenkins_vpc_id
   ec2_intance_id           = module.jenkins-ec2.jenkins_instance_id
 
@@ -37,11 +37,11 @@ module "lb-target-group" {
 
 module "load-balancer" {
   source                     = "./load-balancer"
-  lb_name                    = "jenkins_load_balancer"
+  lb_name                    = "jenkins-load-balancer"
   is_internal                = false
   lb_type                    = "application"
-  lb_sg                      = module.security-group.sg_id
-  lb_subnet                  = module.networking.public_subnet_id
+  lb_sg                      = [module.security-group.sg_id]
+  lb_subnet                  = [module.networking.public_subnet_id]
   target_group_arn           = module.lb-target-group.lb_target_group_arn
   ec2_intance_id             = module.jenkins-ec2.jenkins_instance_id
   target_group_attach_port   = 8080
@@ -50,19 +50,21 @@ module "load-balancer" {
   lb_default_action_type     = "forward"
   lb_https_listener_port     = 443
   lb_https_listener_protocol = "HTTPS"
-  jenkins_acm_arn            = ""
+  jenkins_acm_arn            = module.acm.jenkins_acm_arn
 
 }
 
 module "hosted-zone" {
-  source         = "./hosted-zone"
+  source = "./hosted-zone"
   subdomain_name = "jenkins.infotex.digital"
-  lb_dns_name    = module.load-balancer.lb_dns_name
-  lb_zone_id     = module.load-balancer.lb_zone_id
+  lb_dns_name = module.load-balancer.lb_dns_name
+  lb_zone_id = module.load-balancer.lb_zone_id
 
 }
 
-# module "acm" {
-#   source = ""
+module "acm" {
+  source = "./acm"
+  domain_name = "jenkins.infotex.digital"
+  hosted_zone_id = module.hosted-zone.hosted_zone_id
 
-# }
+}
