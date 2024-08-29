@@ -13,6 +13,14 @@ variable "lb_https_listener_port" {}
 variable "lb_https_listener_protocol" {}
 variable "jenkins_acm_arn" {}
 
+output "lb_dns_name" {
+  value = aws_lb.jenkins_lb.dns_name
+}
+
+output "lb_zone_id" {
+  value = aws_lb.jenkins_lb.zone_id
+}
+
 resource "aws_lb" "jenkins_lb" {
   name               = var.lb_name
   internal           = var.is_internal
