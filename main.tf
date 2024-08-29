@@ -55,16 +55,16 @@ module "load-balancer" {
 }
 
 module "hosted-zone" {
-  source = "./hosted-zone"
+  source         = "./hosted-zone"
   subdomain_name = "jenkins.infotex.digital"
-  lb_dns_name = module.load-balancer.lb_dns_name
-  lb_zone_id = module.load-balancer.lb_zone_id
+  lb_dns_name    = module.load-balancer.lb_dns_name
+  lb_zone_id     = module.load-balancer.lb_zone_id
 
 }
 
 module "acm" {
-  source = "./acm"
-  domain_name = "jenkins.infotex.digital"
+  source         = "./acm"
+  domain_name    = "jenkins.infotex.digital"
   hosted_zone_id = module.hosted-zone.hosted_zone_id
 
 }
