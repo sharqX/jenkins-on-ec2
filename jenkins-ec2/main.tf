@@ -6,9 +6,13 @@ variable "pub_ip" {}
 variable "user_data_install_jenkins" {}
 variable "public_key" {}
 
+output "jenkins_instance_id" {
+  value = aws_instance.jenkins_ec2.id
+}
+
 resource "aws_instance" "jenkins_ec2" {
   ami           = var.ami_id
-  instance_type = var.ami_id
+  instance_type = var.instance_type
 
   tags = {
     Name = "Jenkins EC2"
@@ -28,6 +32,6 @@ resource "aws_instance" "jenkins_ec2" {
 }
 
 resource "aws_key_pair" "ec2_key_name" {
-  key_name   = "aws_ec2"
+  key_name   = "ec2_key"
   public_key = var.public_key
 }

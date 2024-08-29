@@ -27,6 +27,6 @@ variable "ami_id" {
 }
 
 variable "public_key" {
-  type = string
+  type        = string
   description = "Public key value"
 }
