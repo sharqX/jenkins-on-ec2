@@ -31,7 +31,8 @@ ami_id     = "ami-id of your choice"
 public_key = "Your public key"
 ```
 > [!WARNING] 
-> You need to have your own domain name
+> You need to have your own domain name<br>
+
 > [!TIP]
 > You can buy your own domain name on [GoDaddy](www.godaddy.com) or [Squarepace Domains](domains.squarespace.com)<br>
 
